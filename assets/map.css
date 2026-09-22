@@ -1,0 +1,406 @@
+/**
+ * OSM Easy Points — frontend styles.
+ */
+.oep-map {
+	position: relative;
+	width: 100%;
+	min-height: 240px;
+	background: #dfe8ef;
+	border-radius: 8px;
+	overflow: hidden;
+	z-index: 0;
+}
+
+.oep-map.leaflet-container {
+	font: inherit;
+}
+
+/* Markers ---------------------------------------------------------------- */
+
+.oep-marker {
+	background: transparent;
+	border: 0;
+}
+
+.oep-marker .oep-pin {
+	display: block;
+	filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+	transform-origin: 50% 100%;
+	transition: transform 0.15s ease;
+	animation: oep-drop 0.25s ease-out;
+}
+
+@keyframes oep-drop {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.oep-marker .oep-pin {
+		animation: none;
+	}
+}
+
+/* Hover/highlight: tint the gradient body solid brand blue.
+	Icon pins keep their own color but still get a slight lift. */
+.oep-marker:hover .oep-pin svg .oep-pin-body,
+.oep-marker-hl .oep-pin svg .oep-pin-body {
+	fill: #1a73e8;
+	stroke: #14549f;
+}
+
+.oep-marker.oep-marker-icon:hover .oep-pin svg .oep-pin-body {
+	fill-opacity: 0.8;
+}
+
+.oep-pin-emoji {
+	dominant-baseline: central;
+	font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+
+.oep-marker:hover .oep-pin,
+.oep-marker-hl .oep-pin {
+	transform: scale(1.15);
+}
+
+/* Controls column ---------------------------------------------------------- */
+
+.oep-controls {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 500;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.oep-btn {
+	font: inherit;
+	font-size: 13px;
+	line-height: 1;
+	padding: 8px 12px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 6px;
+	background: #fff;
+	color: #1d2327;
+	cursor: pointer;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.oep-btn:hover {
+	background: #f0f0f1;
+}
+
+.oep-btn-locate,
+.oep-btn-list {
+	width: 36px;
+	padding: 8px 0;
+	text-align: center;
+	font-size: 16px;
+}
+
+.oep-btn-primary {
+	background: #1a73e8;
+	border-color: #1a73e8;
+	color: #fff;
+	font-weight: 600;
+}
+
+.oep-btn-primary:hover {
+	background: #1558b8;
+	color: #fff;
+}
+
+.oep-btn-primary:disabled {
+	opacity: 0.6;
+	cursor: wait;
+}
+
+/* Add-point form ------------------------------------------------------------ */
+
+.oep-form {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 600;
+	width: min(320px, calc(100% - 60px));
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+	padding: 14px 16px 16px;
+	display: none;
+}
+
+.oep-form.oep-open {
+	display: block;
+}
+
+.oep-form h3 {
+	margin: 0 0 4px;
+	font-size: 15px;
+}
+
+.oep-form-hint {
+	margin: 0 0 8px;
+	font-size: 12px;
+	color: #666;
+}
+
+.oep-coords {
+	font-size: 11px;
+	font-family: monospace;
+	color: #1a73e8;
+	min-height: 14px;
+	margin-bottom: 8px;
+}
+
+.oep-form input[type="text"],
+.oep-form textarea {
+	width: 100%;
+	font: inherit;
+	font-size: 13px;
+	padding: 7px 9px;
+	margin-bottom: 8px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-sizing: border-box;
+	resize: vertical;
+}
+
+.oep-form input:focus,
+.oep-form textarea:focus {
+	border-color: #1a73e8;
+	outline: none;
+	box-shadow: 0 0 0 1px #1a73e8;
+}
+
+/* Honeypot: invisible to humans, tempting to bots. */
+.oep-form .oep-hp {
+	position: absolute !important;
+	left: -9999px !important;
+	height: 1px;
+	width: 1px;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.oep-form-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.oep-form-msg {
+	margin: 8px 0 0;
+	font-size: 12.5px;
+	min-height: 16px;
+}
+
+.oep-msg-ok {
+	color: #1a7f37;
+}
+
+.oep-msg-err {
+	color: #b32d2e;
+}
+
+/* Points panel ---------------------------------------------------------------- */
+
+.oep-panel {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	bottom: 10px;
+	z-index: 550;
+	width: min(320px, calc(100% - 60px));
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+	padding: 12px;
+	display: none;
+	flex-direction: column;
+}
+
+.oep-panel.oep-open {
+	display: flex;
+}
+
+.oep-search {
+	width: 100%;
+	font: inherit;
+	font-size: 13px;
+	padding: 7px 9px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin-bottom: 8px;
+}
+
+.oep-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow-y: auto;
+	flex: 1;
+}
+
+.oep-list li {
+	padding: 8px 6px;
+	border-bottom: 1px solid #f0f0f1;
+	cursor: pointer;
+	font-size: 13px;
+}
+
+.oep-list li:hover {
+	background: #f4f7fb;
+}
+
+.oep-list li strong {
+	display: block;
+}
+
+.oep-li-text {
+	display: block;
+	color: #666;
+	font-size: 12px;
+	margin-top: 2px;
+}
+
+.oep-panel-empty {
+	display: none;
+	color: #666;
+	font-size: 13px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+/* Popups -------------------------------------------------------------------- */
+
+.oep-popup {
+	font: inherit;
+	max-width: 240px;
+	position: relative;
+}
+
+.oep-popup-icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	font-size: 17px;
+	line-height: 1;
+	filter: saturate(1.15);
+	font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+
+.oep-popup-title {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 4px;
+	padding-right: 24px;
+}
+
+.oep-popup-text {
+	margin: 0 0 6px;
+	font-size: 13px;
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+}
+
+.oep-popup-text a {
+	color: #1a73e8;
+	text-decoration: underline;
+	word-break: break-all;
+}
+
+.oep-popup-text a:hover {
+	color: #0b47a1;
+}
+
+/* Icon picker ------------------------------------------------------------------ */
+
+.oep-icon-picker {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	margin: 0 0 8px;
+}
+
+.oep-icon-choice {
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+	line-height: 1;
+	border: 1px solid #c3c4c7;
+	border-radius: 6px;
+	background: #fff;
+	cursor: pointer;
+	padding: 0;
+	font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+}
+
+.oep-icon-choice:hover {
+	background: #f0f6ff;
+	border-color: #1a73e8;
+}
+
+.oep-icon-choice.oep-icon-selected {
+	background: #e8f0fe;
+	border-color: #1a73e8;
+	box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.25);
+}
+
+/* Chips in the points list ------------------------------------------------------- */
+
+.oep-list .oep-popup-icon {
+	position: static;
+	margin-right: 5px;
+	font-size: 14px;
+}
+
+.oep-list li {
+	position: relative;
+}
+
+.oep-popup-meta {
+	font-size: 11.5px;
+	color: #777;
+}
+
+.oep-popup-author.oep-anon {
+	font-style: italic;
+}
+
+.oep-popup-delete {
+	margin-top: 8px;
+	font: inherit;
+	font-size: 12px;
+	padding: 4px 10px;
+	border: 1px solid #b32d2e;
+	border-radius: 4px;
+	background: #fff;
+	color: #b32d2e;
+	cursor: pointer;
+}
+
+.oep-popup-delete:hover {
+	background: #b32d2e;
+	color: #fff;
+}
+
+/* Small screens --------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+	.oep-form,
+	.oep-panel {
+		width: calc(100% - 56px);
+	}
+}
