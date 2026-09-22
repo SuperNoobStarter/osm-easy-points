@@ -541,6 +541,9 @@
 				headers: delHeaders,
 			})
 				.then(function (r) {
+					if (r.status === 401 || r.status === 403) {
+						throw new Error('forbidden');
+					}
 					if (!r.ok) throw new Error('failed');
 					return r.json();
 				})
@@ -553,7 +556,11 @@
 					renderList();
 					map.fire('oep:deleted');
 				})
-				.catch(function () { /* noop */ });
+				.catch(function (err) {
+					if (err && err.message === 'forbidden') {
+						window.alert(T.deleteDenied || 'Only admins can delete points.');
+					}
+				});
 		});
 
 		// Keep Leaflet happy inside flexible layouts.

@@ -3,7 +3,7 @@
  * Plugin Name:       OSM Easy Points
  * Plugin URI:        https://github.com/osm-easy-points
  * Description:       Interactive OpenStreetMap for any editor (shortcode or block). Anyone can add points with text — no login, no permission needed.
- * Version:           1.1.2
+ * Version:           1.1.3
  * Requires at least: 5.8
  * Requires PHP:      7.2
  * Author:            OSM Easy Points
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OEP_VERSION', '1.1.2' );
+define( 'OEP_VERSION', '1.1.3' );
 define( 'OEP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OEP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'OEP_REST_NS', 'osm-easy-points/v1' );
@@ -276,7 +276,7 @@ function oep_frontend_data() {
 		// (their requests are unauthenticated), and cached pages would serve
 		// stale nonces that make WordPress reject their submissions.
 		'nonce'    => is_user_logged_in() ? wp_create_nonce( 'wp_rest' ) : '',
-		'canDelete' => current_user_can( 'manage_options' ) ? 1 : 0,
+		'canDelete' => oep_can_delete_points() ? 1 : 0,
 		'tileset'  => $o['tileset'],
 		'icons'    => oep_point_icons(),
 		'defaults' => array(
@@ -304,6 +304,7 @@ function oep_frontend_data() {
 			'untitled'      => __( 'Untitled point', 'osm-easy-points' ),
 			'anonymous'     => __( 'Anonymous', 'osm-easy-points' ),
 			'delete'        => __( 'Delete', 'osm-easy-points' ),
+			'deleteDenied'  => __( 'Only admins can delete points.', 'osm-easy-points' ),
 			'confirmDelete' => __( 'Delete this point permanently?', 'osm-easy-points' ),
 			'deleted'       => __( 'Point deleted.', 'osm-easy-points' ),
 			'noPoints'      => __( 'No points yet — be the first!', 'osm-easy-points' ),
@@ -559,8 +560,14 @@ function oep_sanitize_author( $value ) {
 	return mb_substr( sanitize_text_field( (string) $value ), 0, 60 );
 }
 
+/**
+ * Who may delete points? Admins only - both for the frontend popup button
+ * and for the REST DELETE endpoint. Site owners can hand this to other
+ * roles (e.g. editors) via the oep_delete_capability filter.
+ */
 function oep_can_delete_points() {
-	return current_user_can( 'manage_options' );
+	$cap = apply_filters( 'oep_delete_capability', 'manage_options' );
+	return current_user_can( $cap );
 }
 
 function oep_client_ip_hash() {

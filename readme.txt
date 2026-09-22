@@ -4,7 +4,7 @@ Tags: map, openstreetmap, leaflet, block, shortcode
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.2
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,7 +76,13 @@ Open **OSM Points → Points** in the admin. You can inspect every point, jump t
 
 Yes: `add_filter( 'oep_rate_limit_per_hour', function () { return 10; } );` (default 30 per visitor per hour; set to 0 to disable).
 
+= Who can delete points? =
+
+Only WordPress administrators (or anyone with the manage_options capability). Visitors never see a delete button, and the delete API rejects everyone else with 403 Forbidden. Developers can widen this with the oep_delete_capability filter.
 == Changelog ==
+
+= 1.1.3 =
+* Hardening: deletion is strictly admin-only. The REST DELETE endpoint, the frontend popup button and the admin dashboard all share one capability check, now filterable via the oep_delete_capability filter. Rejected deletes show a clear message instead of failing silently.
 
 = 1.1.2 =
 * Fixed: on sites using "plain" permalinks, newly saved points disappeared after a page reload (the points list request was malformed and silently failed). Points now load reliably on every permalink style.
