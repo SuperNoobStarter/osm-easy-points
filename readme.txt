@@ -4,7 +4,7 @@ Tags: map, openstreetmap, leaflet, block, shortcode
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.2
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,7 +79,15 @@ Yes: `add_filter( 'oep_rate_limit_per_hour', function () { return 10; } );` (def
 = Who can delete points? =
 
 Only WordPress administrators (or anyone with the manage_options capability). Visitors never see a delete button, and the delete API rejects everyone else with 403 Forbidden. Developers can widen this with the oep_delete_capability filter.
+
+= Does deleting the plugin delete my points? =
+
+No. Since 1.1.4 your points and settings survive deleting the plugin, so you can safely delete + reinstall it to update. If you really want everything wiped on uninstall, add `define( 'OEP_WIPE_ON_UNINSTALL', true );` to wp-config.php first.
+
 == Changelog ==
+
+= 1.1.4 =
+* Safe reinstalls: deleting the plugin no longer deletes your points. Points and settings survive a delete + reinstall, so updating is data-safe on every WordPress version. (Full wipe on uninstall is still possible via the OEP_WIPE_ON_UNINSTALL constant in wp-config.php.)
 
 = 1.1.3 =
 * Hardening: deletion is strictly admin-only. The REST DELETE endpoint, the frontend popup button and the admin dashboard all share one capability check, now filterable via the oep_delete_capability filter. Rejected deletes show a clear message instead of failing silently.

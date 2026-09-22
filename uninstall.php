@@ -1,12 +1,23 @@
 <?php
 /**
- * OSM Easy Points — uninstall cleanup.
- * Removes the points table and all options. Warns users in the readme that
- * uninstalling deletes all points.
+ * OSM Easy Points - uninstall cleanup.
+ *
+ * SAFE BY DEFAULT: deleting the plugin does NOT delete your points or
+ * settings. You can safely delete + reinstall the plugin to update it
+ * without losing any data.
+ *
+ * To wipe everything when the plugin is deleted, add this line to
+ * wp-config.php above the "That's all, stop editing!" line:
+ *
+ *   define( 'OEP_WIPE_ON_UNINSTALL', true );
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
+}
+
+if ( ! defined( 'OEP_WIPE_ON_UNINSTALL' ) || ! OEP_WIPE_ON_UNINSTALL ) {
+	return; // Keep points and settings - safe reinstalls.
 }
 
 global $wpdb;

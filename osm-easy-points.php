@@ -3,7 +3,7 @@
  * Plugin Name:       OSM Easy Points
  * Plugin URI:        https://github.com/osm-easy-points
  * Description:       Interactive OpenStreetMap for any editor (shortcode or block). Anyone can add points with text — no login, no permission needed.
- * Version:           1.1.3
+ * Version:           1.1.4
  * Requires at least: 5.8
  * Requires PHP:      7.2
  * Author:            OSM Easy Points
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'OEP_VERSION', '1.1.3' );
+define( 'OEP_VERSION', '1.1.4' );
 define( 'OEP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'OEP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'OEP_REST_NS', 'osm-easy-points/v1' );
